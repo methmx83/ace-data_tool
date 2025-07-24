@@ -1,0 +1,7 @@
+gradio>=3.0
+requests
+beautifulsoup4
+numpy
+librosa
+mutagen
+nltk

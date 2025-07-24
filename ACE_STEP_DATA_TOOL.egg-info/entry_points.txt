@@ -1,0 +1,2 @@
+[console_scripts]
+ace-data = webui.app:main

@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+.venv
+*.egg-info/
+*.sqlite
+
+# Audio/Output
+audio_data/**/*.txt
+audio_data/**/*.json
+audio_data/**/*.csv
+
+# VS Code
+.vscode/

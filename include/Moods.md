@@ -1,0 +1,867 @@
+ 
+## Dateiinhaltsformat
+- *_prompt.txt- Audio-Tags
+
+Einfache, durch Kommas getrennte Audiomerkmale, die den Klang, die Instrumente, das Genre, die Stimmung usw. beschreiben.
+
+
+** Richtlinien zum Erstellen von Eingabeaufforderungs-Tags:
+- Geben Sie das Genre an (z. B. "rap", "pop", "rock", "electronic")
+- Geben Sie den Stimmtyp an (z. B. "male vocal", "female vocal", "spoken word")
+- Geben Sie tatsächlich gehörte Instrumente an (z. B. "guitar", "piano", "synthesizer", "drums")
+- Geben Sie Stimmung/Energie an (z. B. "energetic", "calm", "aggressive", "melancholic")
+- Geben Sie das Tempo an, falls bekannt (z. B. "120 bpm", "fast tempo", "slow tempo")
+- Geben Sie die Tonart an , falls bekannt (z. B. "major key", "minor key", "C major")
+
+
+** Beispiel:
+
+melodic techno, male vocal, electronic, emotional, minor key, 124 bpm, synthesizer, driving, atmospheric
+
+- Alle Tags in Englischer Sprache
+
+## Genre Liste:
+- Yoga Video
+- Indie Folk
+- Meditation
+- Laid Back
+- Kitsch
+- Kid
+- Jingles
+- Jazz Funk
+- Jazz Rock
+- Irish Folk
+- Inspirational
+- Industrial Cinema
+- Industrial
+- Indie Pop
+- Hybrid Orchestral
+- Motivational
+- Gothic
+- Folktronica
+- Synth Pop
+- Future
+- Future Bass
+- Game
+- Glitch Folk
+- Grunge
+- Hybrid
+- Guitar Electric
+- Urban
+- HardRock
+- Hip-Hop
+- Twee Pop
+- Turntablism
+- Meditation Video
+- New Wave
+- Film Scores
+- Soundtrack
+- Technology
+- Shoegaze
+- Singer Songwriter
+- Synthwave
+- Stomp Rock
+- SummerHits
+- Surf Rock
+- Synth Bass
+- Trailer
+- Trap
+- Punk
+- Post Punk
+- Post Rock
+- Psychedelic
+- Psychedelic Rock
+- Trip Hop
+- R &B
+- Radio Rock
+- Ragtime
+- Regga
+- Reggaeton
+- Tropical
+- FolkRock
+- French Touch
+- Synth Bell
+- Urban Pop
+- Cinematic
+- Chilling
+- Chill-Out
+- Lounge
+- Pop
+- Quirky Pop
+- Dream Pop
+- Easy Listening
+- Soundtrack
+- Children
+- Cartoon
+- 80's
+- Classical Contemporary
+- Beach
+- Vox
+- Background Music
+- Background
+- Avant-Garde
+- Atmosphere
+- Americana
+- Ambient Rock
+- Ambiance
+- Alternative
+- Aggressive
+- Afrobeat
+- Adult
+- Cinematic EDM
+- Chilling Vibe
+- Abstract
+- Drum Solo
+- Drones
+- Drill
+- Drum'n'bass
+- Drums
+- Dancehall
+- Dance/techno
+- Electronic
+- War
+- CountryFolk
+- Country Folk
+- Electronica And Dance
+- Techno
+- Trance
+- Acid
+- Acid House
+- Acid Jazz
+- Acid Lounge
+- Arcade
+- Beat Box
+- Beats
+- Dance
+- Big Beat
+- Breakbeat
+- Club
+- House
+- Funky House
+- Progressive House
+- Disco
+- Disco House
+- Downtown
+- Drum And Bass
+- Dubstep
+- EDM
+- Electro
+- Electro Disco
+- Electro House
+- Electro Pop
+- Electro Rock
+- Fusion
+- Future Electronic
+- Modern Electronic
+- New Age
+- ElectroRock
+- Yoga
+- Ethereal
+- Experimental
+- Cool Jazz
+- Rock
+- Acoustic Rock
+- Alternative Rock
+- Soft Rock
+- Rock Ballad
+- Power Rock
+- Indie Rock
+- Synth Rock
+- Hard Rock
+- Brit Rock
+- Blues Rock
+- Art Rock
+- American Rock
+- Power Ballad
+- Halloween Rock
+- Hardcore
+- Heavy Metal
+- Indie
+- Metal
+- Nu Metal
+- Pop
+- Pop Rock
+- Chart Pop
+- Acoustic Pop
+- Soft Pop
+- Britpop
+- Baroque Pop
+- Bubblegum Pop
+- Rap
+- Hip Hop
+- Acoustic
+- Acoustic Guitar
+- Blues
+- Bluegrass
+- Film and TV
+- Film Score
+- Scene Change
+- Soundtracks
+- TV Soundtracks
+- Broadcast Music
+- Current Affairs
+- News
+- World
+- Africa
+- African
+- Rhumba
+- New Orleans
+- Mambo
+- Latin
+- Jamaican
+- Indian
+- French
+- Exotica
+- Ethnic
+- Eastern
+- Cuban
+- Celtic
+- Caribbean
+- Calypso
+- Bollywood
+- Asian
+- Western
+- Salsa
+- Baroque
+- Jungle
+- Soul
+- Motown
+- Piano
+- Acoustic Piano
+- Classical Piano
+- Chill Out
+- Childrens
+- Nursery Rhymes
+- Country
+- Christmas
+- Carols
+- Christmas Church Organ
+- Classic Rock Christmas
+- Easy Listening
+- Soundscape
+- Ambient
+- Atmospheres
+- Downtempo
+- Lounge
+- Nostalgic
+- Corporate
+- Funk
+- Jazz
+- 30s Jazz
+- Smooth Jazz
+- Swing
+- Big Band
+- Reggae
+- Folk
+- Shanties
+- Classical
+- Classical Period
+- Romance
+- Vintage
+- Ballroom
+- Orchestral
+- Contemporary
+- National Anthem
+- Action
+- Ballad
+- Beau
+- Crime
+- Epic
+- Festive
+- Garage
+- Happy Birthday
+- Holiday
+- Horror
+- Religious
+- Retro
+- Rock And Roll
+- Rockabilly
+- Sci Fi
+- Sport
+- Thriller
+- Traditional
+- Wedding Music
+- Worship
+- Boogie Woogie
+- 30s
+- 40s
+- 50s
+- 60s
+- 70s
+- 80s
+
+## Mood Liste:
+- Action
+- Adventurous
+- Aggressive
+- Airy
+- Ambient
+- Angelic
+- Angry
+- Anthemic
+- Anxious
+- Arcade
+- Atmospheric
+- Beats
+- Beats To Rap To
+- Beau
+- Beautiful
+- Black
+- Bouncy
+- Bright
+- Care Free
+- Carefree
+- Caribbean
+- Catchy
+- Charm
+- Cheerful
+- Childlike
+- Chilled
+- Chilling
+- Cinematic
+- Clapping
+- Classic
+- Clumsy
+- Cold
+- Colorful
+- Confident
+- Contemplative
+- Cool
+- Cool Vibe
+- Corporate
+- Cosy
+- Courageous
+- Creepy
+- Cultured
+- Cute
+- Dancing
+- Danger
+- Daring
+- Dark
+- Deep
+- Depressing
+- Determined
+- Digital
+- Dirty
+- Distant
+- Downbeat
+- Dramatic
+- Dreamy
+- Driving
+- Dynamic
+- Eager
+- Earthy
+- Eccentric
+- Edgy
+- Eerie
+- Elated
+- Electro
+- Emotional
+- Empowering
+- Encouraging
+- Energetic
+- Epic
+- Ethereal
+- Euphoric
+- Evolving
+- Exciting
+- Exotic
+- Exotica
+- Expansive
+- Experimental
+- Family
+- Feel Good
+- Festive
+- Film
+- Frantic
+- Free
+- Frightening
+- Frisky
+- Fun
+- Funny
+- Futuristic
+- Gentle
+- Glamorous
+- Glitchy
+- Good Time
+- Groove
+- Groovy
+- Happy
+- Happy Birthday
+- Hard
+- Haunting
+- Heavy
+- Heroic
+- Holiday
+- Homely
+- Hopeful
+- Humorous
+- Hypnotic
+- Industrial
+- Inquisitive
+- Inspirational
+- Inspiring
+- Intense
+- Intimate
+- Laid Back
+- Light
+- Lo-FI
+- Lonely
+- Lost
+- Love
+- Lustful
+- Magical
+- Meditative
+- Melancholic
+- Mellow
+- Melodic
+- Minimal
+- Moody
+- Motivational
+- Mournful
+- Mysterious
+- Mystical
+- Nervous
+- Nostalgic
+- Off Beat
+- Ominous
+- Optimistic
+- Organic
+- Otherworldly
+- Passionate
+- Peaceful
+- Pensive
+- Playful
+- Poetic
+- Positive
+- Powerful
+- Quirky
+- Rebellious
+- Reflective
+- Regal
+- Rejected
+- Relaxed
+- Relaxing
+- Relentless
+- Religious
+- Restless
+- Retro
+- Reverb
+- Romantic
+- Royal
+- Rural
+- Rustic
+- Sad
+- Scary
+- Sentimental
+- Sexy
+- Smoky
+- Smooth
+- Soft
+- Solemn
+- Somber
+- Songs
+- Sophisticated
+- Soulful
+- Sparse
+- Street
+- Sub
+- Summer
+- Sunny
+- Sunshine
+- Suspense
+- Suspenseful
+- Swinging
+- Tech
+- Techno For New Media
+- Tense
+- Tension
+- Terror
+- Thoughtful
+- Triumphant
+- Understated
+- Upbeat
+- Uplifting
+- Uptempo
+- Urban
+- Urgent
+- Utopian
+- Vicious
+- Vintage
+- Vulnerable
+- Warm
+- Wild
+- World
+- Yearning
+- Yesteryear
+- Youth
+
+## Instrument Liste:
+- 808
+- Ocarina
+- Pulsing Bass
+- Pluck
+- Pizzicato
+- Piano, Bass, Guitar, Percussion, Xylophone
+- Piano, Bass, Guitar, Percussion, Drums
+- Piano, Bass, Guitar, Percussion, Claps
+- Piano, Bass, Guitar, Percussion
+- Pedalsteel
+- Panpipes
+- Orchestra
+- Nylon Guitar
+- Recorder
+- Music Box
+- Modern Drums Beats
+- Mallet
+- Male Vocal
+- 808 Bass
+- Lap Steel
+- Key
+- Kazoo
+- Intense
+- Industrial Drums
+- Pulsing Bass Strings
+- Retro Synth
+- Harmonium
+- Texture
+- Xylophone
+- World
+- Whistling
+- Whistle
+- Vox
+- Vocal Fx
+- Vocal
+- Violon
+- Trompete
+- Triangle
+- Theremin
+- Tambourine
+- Sfx
+- Synth Bell
+- Synth Pad
+- Synth Mallet
+- Synth Lead
+- Synth Bell Strings
+- Synth Bell
+- Synth Bass
+- String
+- Steeldrum
+- Snap
+- Slideguitar
+- Sleighbells
+- Horn
+- Leads
+- Cinematic Drums
+- Drums Piano
+- Drums & Fx
+- Drum
+- Drone
+- Crotales
+- Congo
+- Conga
+- Hand Drums
+- Clock
+- Clapping
+- Clap
+- Chord
+- Electric Keyboard
+- Choirs
+- Chime
+- Celesta
+- Box
+- Big Drums
+- Arpeggio
+- Bell
+- Atmosphere
+- Bass, Guitar, Percussion, Xylophone
+- Bass, Guitar, Percussion
+- Backing Vocals
+- Electric
+- Dulcimer
+- Gong
+- Gritty Bass
+- Arp
+- Arpeggiated
+- Flute
+- Fiddle
+- Female Vocal
+- Euphonium
+- Frenchhorn
+- Electronic Drums
+- French Horns
+- Guitar
+- Acoustic Guitar
+- Bass Guitar
+- Blues Guitar
+- Distorted Guitar
+- Electric Guitar
+- Fender Rhodes
+- Lapsteel
+- Latin Guitar
+- Metal Guitar
+- Reggae Guitar
+- Skank Guitar
+- Spanish Guitar
+- Surf Guitar
+- Tremolo
+- Wah Wah
+- Wah Wah Guitar
+- Guitar Electric
+- Ambiance
+- Electro Drums
+- Electro
+- Electrical Guitar
+- Fx
+- Analog Synth
+- Bass
+- Acoustic Bass
+- Electric Bass
+- Slap Bass
+- Upright Bass
+- Piano
+- Acoustic Piano
+- Christmas Piano
+- Classical Piano
+- Electric Piano
+- Harpsichord
+- Kalimba
+- Keyboard
+- Keys
+- Kids Piano
+- Piano Echoes
+- Reverse Piano
+- Synth
+- Ambience
+- Bass Synth
+- Digital Synth
+- Effects
+- Electro
+- Epic Synth
+- Indian Synth
+- Middle East Synth
+- Pads Synth
+- Vibes
+- Strings
+- Action Strings
+- Cello
+- Chikara
+- Double Bass
+- Epic Strings
+- Harp
+- Kora
+- Mandolin
+- Pizz Strings
+- Sarinda
+- Sarod
+- Staccato Strings
+- Tambura
+- Viola
+- Violin
+- Brass
+- French Horn
+- Horns
+- Saxophone
+- Alto Saxophone
+- Baritone Saxophone
+- Tenor Saxophone
+- Staccato Brass
+- Trombone
+- Trumpet
+- Tuba
+- Percussion
+- African Drums
+- Lead Pads
+- Waterphone
+- Vibraphone
+- Toy Box
+- Timpani Cymbals
+- Timpani
+- The Balafon
+- Talking Drum
+- Taiko Drums
+- Steel Pan
+- Steel Drum
+- Nics
+- Nic Drums
+- Maracas
+- Mahler Hammer
+- Latin Percussion
+- African Percussion
+- Djembe
+- Bongos
+- Cahon
+- Celeste
+- Claps
+- Congas
+- Cymbals
+- Drum Loops
+- Kettle Drums
+- Drum Machine
+- Drums
+- Acoustic Drums
+- Electric Drums
+- Glitched Drums
+- Metal Drums
+- Finger Clicks
+- Glitched Percussion
+- Glockenspiel
+- Hand Claps
+- Xylophone
+- Marima
+- Marimba
+- Vocals
+- Backing Vocals
+- Beat Box
+- Choir
+- Filtered Vocals
+- Full Vocals
+- Harmonies
+- Lead Vocals
+- Singing
+- Voice
+- Woodwind
+- Bassoon
+- Clarinet
+- Oboe
+- Pan Pipes
+- Orchestral
+- Hybrid Orchestra
+- Orchestra Effects
+- Orchestral Percussion
+- Organ
+- Carnival Organ
+- Church Organ
+- Funfair Organ
+- Hammond Organ
+- Pipe Organ
+- Wurlitzer
+- Ethnic
+- Ethnic Instruments
+- Ethnic Percussion
+- Ethnic Strings
+- Ethnic Synth
+- Pads
+- Pad
+- Warm Pads
+- Ukulele
+- Vocooder
+- Banjo
+- Lead
+- Samples
+- Bells
+- Christmas Bells
+- Church Bells
+- Gongs
+- Jingle Bells
+- Sleigh Bells
+- Tubular Bells
+- Turntables
+- Beeps
+- Accordion
+- Kids Musical Instruments
+- Sequenced
+- World Instruments
+- Hybrid
+- Harmonica
+- Sounds
+- Folk Instruments
+- Wash
+- Loops
+- Traditional Instruments
+- Church Instruments
+- Sitar
+- Udu
+- Percussion Spanish Guitar
+
+## Rap Styles Liste:
+- Oldschool Rap
+- Boom Bap
+- Golden Era Rap
+- East Coast Rap
+- West Coast Rap
+- Southern Rap
+- Dirty South Rap
+- G-Funk
+- Gangsta Rap
+- Hardcore Rap
+- Underground Rap
+- Conscious Rap
+- Political Rap
+- Lyrical Rap
+- Poetic Rap
+- Abstract Rap
+- Storytelling Rap
+- Battle Rap
+- Freestyle Rap
+- Double-Time Rap
+- Chopper Rap
+- Fast Rap
+- Slow Flow Rap
+- Trap Rap
+- Trap Flow
+- Drill Rap
+- UK Drill
+- Chicago Drill
+- Brooklyn Drill
+- Melodic Rap
+- Emo Rap
+- Sad Rap
+- Lo-Fi Rap
+- Cloud Rap
+- Mumble Rap
+- Whisper Rap
+- Autotune Rap
+- Horrorcore
+- Crunk Rap
+- Bounce Rap
+- Hyphy Rap
+- Snap Rap
+- Jersey Club Rap
+- Phonk
+- PluggnB
+- Experimental Rap
+- Alternative Rap
+- Avant-Garde Rap
+- Industrial Rap
+- Psychedelic Rap
+- Jazz Rap
+- Funk Rap
+- Soulful Rap
+- Reggaeton Rap
+- Latin Trap
+- Afrotrap
+- Grime
+- UK Rap
+- French Rap
+- German Rap
+- K-Rap (Korean Rap)
+- J-Rap (Japanese Rap)
+- Desi Hip-Hop
+- Christian Rap
+- Comedy Rap
+- Parody Rap
+- Nerdcore Rap
+- Battlecore Rap
+- Acapella Rap
+- Street Rap
+- Club Rap
+- Mainstream Rap
+- Pop Rap
+- Commercial Rap
+- Independent Rap
+- Backpack Rap
+- Crossover Rap
+- Trap Metal
+- Scream Rap
+- Drip Rap
+- BPM Flex Rap
+- Ambient Rap
+- Industrial Trap
+- Bounce Trap
+- Minimal Trap
+- Hood Rap
+- Reality Rap
+- Motivational Rap
+- Braggadocio Rap
+- Retrowave Rap
