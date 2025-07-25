@@ -29,33 +29,33 @@ def load_prompt_for_file(mp3_file):
 
 def save_prompt_for_file(mp3_file, new_text):
     if not mp3_file:
-        return "Kein Track ausgewählt."
+        return "No track selected."
     name, _ = os.path.splitext(mp3_file)
     prompt_path = os.path.join(AUDIO_DIR, f"{name}_prompt.txt")
     try:
         with open(prompt_path, "w", encoding="utf-8") as f:
             f.write(new_text.strip())
-        return "✅ Prompt gespeichert."
+        return "✅ Prompt saved!."
     except Exception as e:
-        return f"❌ Fehler: {e}"
+        return f"❌ Error: {e}"
 
 
 def prompt_editor_ui():
     with gr.Row():
         track_dropdown = gr.Dropdown(
             choices=list_audio_files(),
-            label="🎵 Wähle Track",
+            label="🎵 Select track",
             interactive=True
         )
     with gr.Row():
         prompt_box = gr.Textbox(
-            label="📝 Prompt bearbeiten",
+            label="📝 Edit prompt",
             lines=2,
             max_lines=4,
             interactive=True
         )
     with gr.Row():
-        save_btn = gr.Button("💾 Prompt speichern")
+        save_btn = gr.Button("💾 save prompt")
         save_status = gr.Textbox(label="Status", interactive=False)
 
     # Logik verknüpfen

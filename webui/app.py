@@ -1,4 +1,5 @@
-# 🔁 Erweiterte app.py mit Mood + Genre + Prompt-Guidance-Unterstützung
+# 🔁 app.py
+
 import sys
 import os
 
@@ -10,12 +11,13 @@ sys.path.append(os.path.join(project_root, 'tools'))
 
 import shutil
 import gradio as gr
-from prompt_editor import prompt_editor_ui
+from include.prompt_editor import prompt_editor_ui
 from tinytag import TinyTag
-from preset_loader import load_presets
+from include.preset_loader import load_presets
 from scripts.lyrics import load_lyrics, fetch_and_save_lyrics
 from scripts.bpm import get_bpm
 from scripts.tagger import generate_tags, save_tags
+import logging
 
 
 AUDIO_DIR = "data"
@@ -23,28 +25,69 @@ AUDIO_DIR = "data"
 # Lade Genre-Presets
 GENRE_PRESETS = load_presets()
 
-def process_file(mp3_path: str, overwrite_lyrics: bool = False, prompt_guidance: str = "") -> str:
+# Konfigurieren Sie das Logging
+logging.basicConfig(
+    level=logging.DEBUG,  # DEBUG-Level für detaillierte Informationen
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler("app_debug.log"),  # Ausgabe in eine Datei
+        logging.StreamHandler()  # Ausgabe in die Konsole
+    ]
+)
+
+# Beispiel für Logging in Funktionen
+logging.debug("Starte die Anwendung...")
+logging.info("Verarbeite MP3-Datei...")
+logging.error("Fehler bei der Verarbeitung!")
+
+# Fügen Sie Logging in die Hauptfunktionen ein
+
+def process_file(mp3_path: str, overwrite_lyrics: bool = False, prompt_guidance: str = "", progress=gr.Progress()) -> str:
+    logging.info(f"Beginne Verarbeitung der Datei: {mp3_path}")
+    tags = generate_tags(mp3_path, prompt_guidance=prompt_guidance, progress=progress)
     base, _ = os.path.splitext(mp3_path)
-    tag = TinyTag.get(mp3_path)
-    artist = tag.artist or "Unknown"
-    title = tag.title or "Unknown"
+    try:
+        tag = TinyTag.get(mp3_path)
+        artist = tag.artist or "Unknown"
+        title = tag.title or "Unknown"
+        logging.debug(f"Metadaten geladen: Artist={artist}, Title={title}")
+    except Exception as e:
+        logging.error(f"Fehler beim Laden der Metadaten: {e}")
+        artist, title = "Unknown", "Unknown"
 
     lyrics_path = f"{base}_lyrics.txt"
     if not os.path.exists(lyrics_path) or overwrite_lyrics:
+        logging.info(f"Lade und speichere Lyrics für: {artist} - {title}")
         fetch_and_save_lyrics(artist, title, lyrics_path)
     lyrics = load_lyrics(mp3_path) or "–"
 
+    if lyrics == "–":
+        logging.warning(f"Keine Lyrics gefunden für: {mp3_path}")
+        return f"🎵 {os.path.basename(mp3_path)}\n✗ Keine Lyrics gefunden."
+
+    tags_path = f"{base}_prompt.txt"
+    if os.path.exists(tags_path):
+        logging.info(f"Tags existieren bereits für: {mp3_path}. Überspringe Generierung.")
+        return f"🎵 {os.path.basename(mp3_path)}\n✓ Tags already exist."
+
     bpm = get_bpm(mp3_path) or "–"
+    logging.debug(f"BPM-Wert ermittelt: {bpm}")
     tags = generate_tags(mp3_path, prompt_guidance=prompt_guidance)
     save_tags(mp3_path, tags)
+    logging.info(f"Tags gespeichert für: {mp3_path}")
 
     return (
-        f"🎵 {os.path.basename(mp3_path)}\n"
-        f"Artist: {artist}\nTitle: {title}\nBPM: {bpm}\nTags: {', '.join(tags[:8])}...\n"
-        f"✓ Saved lyrics and prompt"
+        f"🎵 {os.path.basename(mp3_path)}      -      ✓ Saved lyrics and prompt\n"
+        f"BPM: {bpm}      -      TAGS: {', '.join(tags[:8])}..."
     )
 
+# Logging für die UI-Funktion
+
 def process_all_ui(overwrite_lyrics: bool = False, genre: str = "Custom", mood: float = 0.0, user_prompt: str = "", progress=gr.Progress()) -> str:
+    logging.info("Starte Verarbeitung aller Dateien im UI-Modus...")
+    for file_path in progress.tqdm(audio_files, desc="Verarbeite Songs"):
+        try:
+            log.append(process_file(file_path, overwrite_lyrics=overwrite_lyrics, prompt_guidance=prompt_guidance, progress=progress))
     if user_prompt.strip():
         prompt_guidance = user_prompt.strip()
     else:
@@ -59,11 +102,14 @@ def process_all_ui(overwrite_lyrics: bool = False, genre: str = "Custom", mood: 
             if file.lower().endswith(('.mp3', '.wav', '.flac', '.m4a')):
                 audio_files.append(os.path.join(root, file))
 
-    for file_path in progress.tqdm(audio_files, desc="Verarbeite Songs"):
+    for file_path in progress.tqdm(audio_files, desc="Processing Songs"):
         try:
+            logging.info(f"Verarbeite Datei: {file_path}")
             log.append(process_file(file_path, overwrite_lyrics=overwrite_lyrics, prompt_guidance=prompt_guidance))
         except Exception as e:
+            logging.error(f"Fehler bei der Verarbeitung von {file_path}: {e}")
             log.append(f"✗ {os.path.basename(file_path)}: {e}")
+    logging.info("Verarbeitung abgeschlossen.")
     return "\n\n---\n\n".join(log)
 
 def export_to_folder(destination: str) -> str:
@@ -71,7 +117,7 @@ def export_to_folder(destination: str) -> str:
         try:
             os.makedirs(destination, exist_ok=True)
         except Exception as e:
-            return f"❌ Zielordner konnte nicht erstellt werden:\n{e}"
+            return f"❌ Destination folder could not be created:\n{e}"
 
     files_copied = 0
     for file in os.listdir(AUDIO_DIR):
@@ -82,9 +128,9 @@ def export_to_folder(destination: str) -> str:
                 shutil.copy(src, dst)
                 files_copied += 1
             except Exception as e:
-                return f"❌ Fehler beim Kopieren von {file}: {e}"
+                return f"❌ Error copying {file}: {e}"
 
-    return f"✅ {files_copied} Dateien exportiert nach:\n{destination}"
+    return f"✅ {files_copied} Files exported to:\n{destination}"
 
 
 with gr.Blocks(css="""
@@ -118,34 +164,53 @@ h1, h2, h3 {
   color: #e0b0ff;
   text-shadow: 0 0 6px rgba(255, 0, 255, 0.2);
 }
+
+#prompt_input {
+  width: 70%;
+}
+
+#model_dropdown {
+  display: none;
+}
 """) as demo:
 
-    gr.Markdown("""# 🎧 Audio Tagger Pro
-**Tag your tracks with lyrics, BPM and moods – fully automated.**""")
-
-    # Hier den neuen Tab für den Prompt Editor einfügen
-    with gr.Tab("📝 Prompt Editor"):
-        prompt_editor_ui()
+    gr.Markdown("""# 🎧 ACE-STEP DATA-TOOL
+**Generates data-files für Ace-Step – fully automated.**""")
+    
+    # Steuerelemente verschoben
+    with gr.Row():
+        lyrics_checkbox = gr.Checkbox(label="Overwrite lyrics", value=False)
+        genre_dropdown = gr.Dropdown(label="🎼 Genre-Preset", choices=list(GENRE_PRESETS.keys()), value="Choose a Preset (optional)")
+        mood_slider = gr.Slider(label="🎭 Mood:  Sad ↔ Happy", minimum=-1.0, maximum=1.0, value=0.0, step=0.1)
 
     with gr.Row():
-        lyrics_checkbox = gr.Checkbox(label="Lyrics überschreiben", value=False)
-        genre_dropdown = gr.Dropdown(label="🎼 Genre-Preset", choices=list(GENRE_PRESETS.keys()), value="Choose a Preset (optional)")
-        mood_slider = gr.Slider(label="🎭 Mood: Sad ↔ Happy", minimum=-1.0, maximum=1.0, value=0.0, step=0.1)
+        prompt_input = gr.Textbox(
+            label="✍️ Prompt addition (optional)", 
+            placeholder="orchestral, melancholic, strings, 80 bpm", 
+            lines=1, 
+            elem_id="prompt_input"
+        )
 
-    prompt_input = gr.Textbox(label="✍️ Manueller Prompt (optional)", placeholder="orchestral, melancholic, strings, 80 bpm", lines=1)
 
+    # Prozess-Log-Box ganz oben
+    output_box = gr.Textbox(label="Process Log", lines=12, interactive=False)
+
+    # Button
     start_button = gr.Button("Start Tagging")
-    output_box = gr.Textbox(label="Process Log", lines=15, interactive=False)
-
     start_button.click(
         fn=process_all_ui,
         inputs=[lyrics_checkbox, genre_dropdown, mood_slider, prompt_input],
         outputs=output_box
     )
 
+    # Prompt Editor Tab direkt unter der Output-Box
+    with gr.Tab("📝 Prompt Editor   -> post-processing <-"):
+        prompt_editor_ui()
+
+    # Export
     with gr.Row():
-        export_folder = gr.Textbox(label="Zielordner für ACE-Step Export", value="Z:/AI/projects/music/ace-step/data/")
-        export_button = gr.Button("📤 Exportiere nach Ordner")
+        export_folder = gr.Textbox(label="ACE-Step Export", value="Z:/AI/projects/music/ace-step/data/")
+        export_button = gr.Button("📤 Export")
         export_button.click(fn=export_to_folder, inputs=export_folder, outputs=output_box)
 
 def main():
