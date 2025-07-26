@@ -7,8 +7,11 @@ def bereinige_datei(dateipfad):
     die mit '[' beginnt, entfernt wird.
     """
     try:
+        print(f"Verarbeite Datei: {dateipfad}")
         with open(dateipfad, 'r', encoding='utf-8') as datei:
             zeilen = datei.readlines()
+
+        print(f"Datei-Inhalt vor Bereinigung:\n{''.join(zeilen[:10])}...")
 
         # Suche den Index der ersten Zeile, die mit '[' beginnt
         start_index = None
@@ -27,6 +30,7 @@ def bereinige_datei(dateipfad):
                 datei.writelines(bereinigte_zeilen)
             
             print(f"Bereinigt: {dateipfad}")
+            print(f"Datei-Inhalt nach Bereinigung:\n{''.join(bereinigte_zeilen[:10])}...")
         else:
             print(f"Übersprungen (keine '['-Zeile gefunden): {dateipfad}")
 
@@ -38,11 +42,10 @@ def main():
     Hauptfunktion: Sucht rekursiv nach *_lyrics.txt Dateien und bereinigt sie.
     """
     # Setze den Ordner, in dem gesucht werden soll
-    start_ordner = os.path.join(os.getcwd(), '..', 'data')
+    start_ordner = os.path.abspath(os.path.join(os.path.dirname(__file__), '../data'))
     print(f"Durchsuche Ordner: {start_ordner}")
 
     # Rekursive Suche nach allen Dateien mit dem Namen *_lyrics.txt
-    # os.path.join mit ** und recursive=True ermöglicht die rekursive Suche
     suchmuster = os.path.join(start_ordner, '**', '*_lyrics.txt')
     lyrics_dateien = glob.glob(suchmuster, recursive=True)
 

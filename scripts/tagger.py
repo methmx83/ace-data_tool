@@ -18,6 +18,7 @@ from librosa.feature import rhythm
 from scripts.lyrics import load_lyrics
 from scripts.bpm import detect_tempo
 from scripts.moods import extract_clean_tags
+from include.clean_lyrics import main as clean_lyrics_main
 
 import nltk
 from nltk.sentiment import SentimentIntensityAnalyzer
@@ -53,7 +54,23 @@ def sanitize_filename(name: str, max_length=120) -> str:
     name = re.sub(r'[-\s]+', '_', name)
     return name[:max_length]
 
+def save_tags(file_path, tags):
+    if not tags:
+        return
+    # Speichere die Tags in eine separate Datei
+    out = os.path.splitext(file_path)[0] + "_prompts.txt"
+    with open(out, "w", encoding="utf-8") as f:
+        f.write(", ".join(tags))
+
+    # Bereinige die Lyrics-Datei
+    lyrics_file = os.path.splitext(file_path)[0] + "_lyrics.txt"
+    from include.clean_lyrics import bereinige_datei
+    bereinige_datei(lyrics_file)
+
 def generate_tags(file_path, prompt_guidance=None, attempt=1):
+    # Rufe das Bereinigungs-Skript auf
+    clean_lyrics_main()
+
     print(f"\n🔧 Starte Tag-Generierung für: {os.path.basename(file_path)}")
     start_time = time.time()
 
@@ -124,10 +141,3 @@ bpm-92, male-vocal, synthesizer, drums, aggressive, gangsta-rap, german-rap, bas
             return generate_tags(file_path, prompt_guidance, attempt + 1)
         print(f"❌ Fehler bei {filename}: {e}")
         return None
-
-def save_tags(file_path, tags):
-    if not tags:
-        return
-    out = os.path.splitext(file_path)[0] + "_prompt.txt"
-    with open(out, "w", encoding="utf-8") as f:
-        f.write(", ".join(tags))
