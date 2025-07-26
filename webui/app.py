@@ -17,7 +17,6 @@ from include.preset_loader import load_presets
 from scripts.lyrics import load_lyrics, fetch_and_save_lyrics
 from scripts.bpm import get_bpm
 from scripts.tagger import generate_tags, save_tags
-import logging
 
 
 AUDIO_DIR = "data"
@@ -25,69 +24,38 @@ AUDIO_DIR = "data"
 # Lade Genre-Presets
 GENRE_PRESETS = load_presets()
 
-# Konfigurieren Sie das Logging
-logging.basicConfig(
-    level=logging.DEBUG,  # DEBUG-Level für detaillierte Informationen
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler("app_debug.log"),  # Ausgabe in eine Datei
-        logging.StreamHandler()  # Ausgabe in die Konsole
-    ]
-)
-
-# Beispiel für Logging in Funktionen
-logging.debug("Starte die Anwendung...")
-logging.info("Verarbeite MP3-Datei...")
-logging.error("Fehler bei der Verarbeitung!")
-
-# Fügen Sie Logging in die Hauptfunktionen ein
-
-def process_file(mp3_path: str, overwrite_lyrics: bool = False, prompt_guidance: str = "", progress=gr.Progress()) -> str:
-    logging.info(f"Beginne Verarbeitung der Datei: {mp3_path}")
-    tags = generate_tags(mp3_path, prompt_guidance=prompt_guidance, progress=progress)
+def process_file(mp3_path: str, overwrite_lyrics: bool = False, prompt_guidance: str = "") -> str:
     base, _ = os.path.splitext(mp3_path)
-    try:
-        tag = TinyTag.get(mp3_path)
-        artist = tag.artist or "Unknown"
-        title = tag.title or "Unknown"
-        logging.debug(f"Metadaten geladen: Artist={artist}, Title={title}")
-    except Exception as e:
-        logging.error(f"Fehler beim Laden der Metadaten: {e}")
-        artist, title = "Unknown", "Unknown"
+    tag = TinyTag.get(mp3_path)
+    artist = tag.artist or "Unknown"
+    title = tag.title or "Unknown"
 
     lyrics_path = f"{base}_lyrics.txt"
     if not os.path.exists(lyrics_path) or overwrite_lyrics:
-        logging.info(f"Lade und speichere Lyrics für: {artist} - {title}")
         fetch_and_save_lyrics(artist, title, lyrics_path)
     lyrics = load_lyrics(mp3_path) or "–"
 
+    # Abbruch, wenn keine Lyrics gefunden wurden
     if lyrics == "–":
-        logging.warning(f"Keine Lyrics gefunden für: {mp3_path}")
+        print(f"No Lyrics {mp3_path} found. Abort!")
         return f"🎵 {os.path.basename(mp3_path)}\n✗ Keine Lyrics gefunden."
 
     tags_path = f"{base}_prompt.txt"
+    # Tags nicht neu generieren, wenn bereits vorhanden
     if os.path.exists(tags_path):
-        logging.info(f"Tags existieren bereits für: {mp3_path}. Überspringe Generierung.")
+        print(f"Tags {mp3_path} already exist. Skip generation.")
         return f"🎵 {os.path.basename(mp3_path)}\n✓ Tags already exist."
 
     bpm = get_bpm(mp3_path) or "–"
-    logging.debug(f"BPM-Wert ermittelt: {bpm}")
     tags = generate_tags(mp3_path, prompt_guidance=prompt_guidance)
     save_tags(mp3_path, tags)
-    logging.info(f"Tags gespeichert für: {mp3_path}")
 
     return (
         f"🎵 {os.path.basename(mp3_path)}      -      ✓ Saved lyrics and prompt\n"
         f"BPM: {bpm}      -      TAGS: {', '.join(tags[:8])}..."
     )
 
-# Logging für die UI-Funktion
-
 def process_all_ui(overwrite_lyrics: bool = False, genre: str = "Custom", mood: float = 0.0, user_prompt: str = "", progress=gr.Progress()) -> str:
-    logging.info("Starte Verarbeitung aller Dateien im UI-Modus...")
-    for file_path in progress.tqdm(audio_files, desc="Verarbeite Songs"):
-        try:
-            log.append(process_file(file_path, overwrite_lyrics=overwrite_lyrics, prompt_guidance=prompt_guidance, progress=progress))
     if user_prompt.strip():
         prompt_guidance = user_prompt.strip()
     else:
@@ -104,12 +72,9 @@ def process_all_ui(overwrite_lyrics: bool = False, genre: str = "Custom", mood: 
 
     for file_path in progress.tqdm(audio_files, desc="Processing Songs"):
         try:
-            logging.info(f"Verarbeite Datei: {file_path}")
             log.append(process_file(file_path, overwrite_lyrics=overwrite_lyrics, prompt_guidance=prompt_guidance))
         except Exception as e:
-            logging.error(f"Fehler bei der Verarbeitung von {file_path}: {e}")
             log.append(f"✗ {os.path.basename(file_path)}: {e}")
-    logging.info("Verarbeitung abgeschlossen.")
     return "\n\n---\n\n".join(log)
 
 def export_to_folder(destination: str) -> str:
