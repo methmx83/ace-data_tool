@@ -34,7 +34,7 @@ warnings.filterwarnings("ignore", message="Lame tag CRC check failed")
 warnings.filterwarnings("ignore", module="librosa")
 warnings.filterwarnings("ignore", message="Xing stream size off by more than 1%")
 
-INPUT_DIR     = r"Z:\\AI\projects\music\ace-data_tool\data"
+INPUT_DIR     = r"data"
 MODEL_NAME    = "deep-x1_q4:latest"
 OLLAMA_URL    = "http://localhost:11434/api/generate"
 RETRY_COUNT   = 2
