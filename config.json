@@ -1,7 +1,0 @@
-{
-  "input_dir": "data",
-  "model_name": "deep-x1_q4:latest",
-  "ollama_url": "http://localhost:11434/api/generate",
-  "retry_count": 2,
-  "request_delay": 1.5
-}

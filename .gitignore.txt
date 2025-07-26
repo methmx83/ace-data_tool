@@ -9,9 +9,19 @@ __pycache__/
 *.sqlite
 
 # Audio/Output
-audio_data/**/*.txt
-audio_data/**/*.json
-audio_data/**/*.csv
+data/**/*.txt
+data/**/*.mp3
+data/**/*.flag
+data/**/*.wav
 
 # VS Code
 .vscode/
+
+# Logs
+*.log
+logs/
+
+# Temp-Dateien
+*.tmp
+*.swp
+*.bak
