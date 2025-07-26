@@ -8,6 +8,7 @@ import time
 import warnings
 import shutil
 import unicodedata
+import json
 
 from tinytag import TinyTag
 import numpy as np
@@ -34,11 +35,16 @@ warnings.filterwarnings("ignore", message="Lame tag CRC check failed")
 warnings.filterwarnings("ignore", module="librosa")
 warnings.filterwarnings("ignore", message="Xing stream size off by more than 1%")
 
-INPUT_DIR     = r"data"
-MODEL_NAME    = "deep-x1_q4:latest"
-OLLAMA_URL    = "http://localhost:11434/api/generate"
-RETRY_COUNT   = 2
-REQUEST_DELAY = 1.5
+# Lade Konfiguration aus JSON-Datei
+config_path = os.path.join(os.path.dirname(__file__), '../config/config.json')
+with open(config_path, 'r') as config_file:
+    config = json.load(config_file)
+
+INPUT_DIR     = config['input_dir']
+MODEL_NAME    = config['model_name']
+OLLAMA_URL    = config['ollama_url']
+RETRY_COUNT   = config['retry_count']
+REQUEST_DELAY = config['request_delay']
 
 def sanitize_filename(name: str, max_length=120) -> str:
     name = unicodedata.normalize('NFKD', name)
