@@ -119,7 +119,7 @@ def save_tags(file_path, tags):
     if not tags:
         return
     # Speichere die Tags in eine separate Datei
-    out = os.path.splitext(file_path)[0] + "_prompts.txt"
+    out = os.path.splitext(file_path)[0] + "_prompt.txt"
     with open(out, "w", encoding="utf-8") as f:
         f.write(", ".join(tags))
 
@@ -174,7 +174,7 @@ BPM: {bpm_value or 'Unknown'}
 7. For rap: include at least one rap-styles tag
 
 ### EXAMPLE
-bpm-92, male-vocal, synthesizer, drums, aggressive, gangsta-rap, german-rap, bass-heavy, dark, street
+bpm-92, male/ female-vocal, synthesizer, drums, aggressive, gangsta-rap, german-rap, bass-heavy, dark, street
 """
 
     # User-Prompt für klare Aufgabenstellung

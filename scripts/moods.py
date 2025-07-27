@@ -56,10 +56,10 @@ def load_standard_tags():
         print(f"⚠️ Fehler beim Laden von Moods.md: {str(e)}")
         print("Verwende Standard-Tags als Fallback")
         return {
-            "genres": ["hip-hop", "rap", "trap", "german rap", "underground rap"],
-            "moods": ["aggressive", "confident", "street", "introspective", "rebellious"],
-            "instruments": ["drums", "bass", "synthesizer", "turntables", "808"],
-            "rap_styles": ["gangsta rap", "battle rap", "storytelling rap", "double-time rap"]
+            "genres": ["hip-hop", "rap", "trap", "german rap", "underground rap", "old school rap", "boom bap", "lo-fi hip hop"],
+            "moods": ["aggressive", "gangster", "street", "deep", "sad", "happy", "party", "chill"],
+            "instruments": ["drums", "bass", "synthesizer", "arpeggiator", "piano", "guitar", "strings"],
+            "rap_styles": ["gangsta rap", "battle rap", "storytelling rap", "double-time rap", "trap rap", "lyrical rap", "male-vocal", "female-vocal"]
         }
 
 
