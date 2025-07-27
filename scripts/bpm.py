@@ -35,5 +35,15 @@ def detect_tempo(file_path):
             return int(match.group(1))
         return None
 
+def adjust_bpm(tempo):
+    # Wenn BPM über 140 liegt, halbiere den Wert
+    if tempo > 140:
+        return tempo // 2
+    # Wenn BPM unter 60 liegt, verdopple den Wert
+    elif tempo < 60:
+        return tempo * 2
+    return tempo
+
 def get_bpm(file_path):
-    return detect_tempo(file_path)
+    detected_tempo = detect_tempo(file_path)
+    return adjust_bpm(detected_tempo)

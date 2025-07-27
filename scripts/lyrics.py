@@ -25,10 +25,10 @@ def get_audio_metadata(file_path):
         title = tag.title or 'Unbekannter Titel'
         artist = tag.artist or 'Unbekannter Künstler'
         album = tag.album or 'Unbekanntes Album'
-        print(f"[Tinytag] Ausgelesene Metadaten: Titel={title}, Künstler={artist}, Album={album}")
+        print(f"[Tinytag] Titel={title}, Künstler={artist}")  # Kürzere Ausgabe
         return {'title': title, 'artist': artist, 'album': album}
     except Exception as e:
-        print(f"Fehler beim Lesen der Metadaten von {file_path}: {e}")
+        print(f"Fehler bei Metadaten: {e}")  # Kürzere Ausgabe
         return {'title': '', 'artist': '', 'album': ''}
 
 
@@ -48,7 +48,6 @@ def process_single_file(file_path):
             f.write(lyrics)
         return True
     except Exception as e:
-        print(f"Fehler bei {file_path}: {e}")
         return False
 
 
@@ -63,15 +62,11 @@ def scrape_genius_lyrics(artist, title):
     # Debugging-Ausgaben
     print(f"Generated URL1: {url1}")
     print(f"Generated URL2: {url2}")
-    
+
     for url in (url1, url2):
-        print(f"Trying URL: {url}")
+        print(f"Trying URL: {url}")  # Kürzere Ausgabe
         resp = requests.get(url, headers=HEADERS)
-        
-        # Debugging-Ausgaben
-        print(f"Response Status Code: {resp.status_code}")
-        print(f"Response Content: {resp.text[:500]}...")
-        
+
         if resp.status_code == 200:
             soup = BeautifulSoup(resp.text, 'html.parser')
             containers = soup.select("div[class*='Lyrics__Container']") or soup.find_all("div", {"data-lyrics-container": "true"})
@@ -89,7 +84,7 @@ def genius_search_fallback(artist, title):
     """Fallback search via Genius search page"""
     query = quote(f"{artist} {title}")
     search_url = f"https://genius.com/search?q={query}"
-    print(f"Searching Genius: {search_url}")
+    print(f"Searching Genius: {search_url}")  # Kürzere Ausgabe
     resp = requests.get(search_url, headers=HEADERS)
     soup = BeautifulSoup(resp.text, 'html.parser')
     links = soup.select("a[href*='/lyrics']")
@@ -102,7 +97,6 @@ def genius_search_fallback(artist, title):
 
 def scrape_genius_lyrics_from_url(url):
     """Scrape lyrics from a discovered Genius URL"""
-    print(f"Fetching from URL: {url}")
     resp = requests.get(url, headers=HEADERS)
     soup = BeautifulSoup(resp.text, 'html.parser')
     containers = soup.select("div[class*='Lyrics__Container']") or soup.find_all("div", {"data-lyrics-container": "true"})
@@ -112,8 +106,7 @@ def scrape_genius_lyrics_from_url(url):
 
 
 def get_lyrics(artist, title):
-    """Return lyrics text, trying patterns + fallback"""
-    print(f"\n➡️ Searching lyrics for: {artist} - {title}")
+    print(f"Suche Lyrics für: {artist} - {title}")  # Kürzere Ausgabe
     lyrics = scrape_genius_lyrics(artist, title)
     if not lyrics:
         time.sleep(REQUEST_DELAY)
@@ -132,10 +125,8 @@ def fetch_and_save_lyrics(artist, title, output_path):
     """Orchestrate lyrics fetch + save to output_path"""
     lyrics = get_lyrics(artist, title)
     if not lyrics or lyrics.lower() == 'lyrics not found':
-        print(f"❌ Lyrics not found for {artist} - {title}")
         return False
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     with open(output_path, 'w', encoding='utf-8') as f:
         f.write(lyrics)
-    print(f"✅ Lyrics saved: {output_path}")
     return True

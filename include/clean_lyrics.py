@@ -11,7 +11,7 @@ def bereinige_datei(dateipfad):
         with open(dateipfad, 'r', encoding='utf-8') as datei:
             zeilen = datei.readlines()
 
-        print(f"Datei-Inhalt vor Bereinigung:\n{''.join(zeilen[:10])}...")
+        print(f"Datei-Inhalt vor Bereinigung:\n{''.join(zeilen[:5])}...")
 
         # Suche den Index der ersten Zeile, die mit '[' beginnt
         start_index = None
@@ -30,7 +30,7 @@ def bereinige_datei(dateipfad):
                 datei.writelines(bereinigte_zeilen)
             
             print(f"Bereinigt: {dateipfad}")
-            print(f"Datei-Inhalt nach Bereinigung:\n{''.join(bereinigte_zeilen[:10])}...")
+            print(f"Datei-Inhalt nach Bereinigung:\n{''.join(bereinigte_zeilen[:5])}...")
         else:
             print(f"Übersprungen (keine '['-Zeile gefunden): {dateipfad}")
 

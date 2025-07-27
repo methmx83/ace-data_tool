@@ -1,4 +1,4 @@
-# 🔁 Erweiterte generate_tags() mit Prompt-Guidance
+# 🔁 Erweiterte generate_tags() mit Prompt-Guidance und stabiler API-Integration
 
 import os
 import requests
@@ -47,6 +47,9 @@ OLLAMA_URL    = config['ollama_url']
 RETRY_COUNT   = config['retry_count']
 REQUEST_DELAY = config['request_delay']
 
+# Konvertiere Generate-URL in Chat-URL
+OLLAMA_CHAT_URL = OLLAMA_URL.replace('/generate', '/chat')
+
 def sanitize_filename(name: str, max_length=120) -> str:
     name = unicodedata.normalize('NFKD', name)
     name = name.encode('ascii', 'ignore').decode('ascii')
@@ -87,40 +90,61 @@ def generate_tags(file_path, prompt_guidance=None, attempt=1):
 
     excerpt = f"[LYRICS EXCERPT]\n{lyrics[:250]}[...]\n\n" if lyrics else ""
 
+    # System-Prompt mit klarer Struktur
     system_prompt = f"""
-[ROLE]
-You are an expert music tagging AI.
+### ROLE
+You are an expert music tagging AI
 
-[METADATA]
+### METADATA
 Artist: {artist}
 Title: {title}
 BPM: {bpm_value or 'Unknown'}
 
-{excerpt}[STYLE GUIDANCE]
-{prompt_guidance or 'Use your best judgment based on the audio.'}
+{excerpt}### STYLE GUIDANCE
+{prompt_guidance or 'Use your best judgment based on the audio'}
 
-[RULES]
-1. ALWAYS include 'bpm-xxx' if BPM known.
-2. Generate 10-12 comma-separated tags.
-3. Use lowercase hyphenated format.
-4. Prioritize tags from Moods.md.
-5. Max 2 genre tags.
-6. Include at least one from each category: vocal type, instruments, mood.
-7. For rap: include at least one rap-style tag.
+### RULES
+1. ALWAYS include 'bpm-xxx' if BPM known
+2. Generate 10-12 comma-separated tags
+3. Use lowercase hyphenated format
+4. Prioritize tags from Moods.md
+5. Max 2 genre tags
+6. Include at least one from each category: vocal type, instruments, mood
+7. For rap: include at least one rap-style tag
 
-[EXAMPLE]
+### EXAMPLE
 bpm-92, male-vocal, synthesizer, drums, aggressive, gangsta-rap, german-rap, bass-heavy, dark, street
 """
+
+    # User-Prompt für klare Aufgabenstellung
+    user_prompt = "Generate music tags based on the rules above. Output ONLY comma-separated tags."
+
+    payload = {
+        "model": MODEL_NAME,
+        "messages": [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt}
+        ],
+        "stream": False,
+        "options": {"num_ctx": 2048}
+    }
 
     time.sleep(REQUEST_DELAY * attempt)
     try:
         resp = requests.post(
-            OLLAMA_URL,
-            json={"model": MODEL_NAME, "prompt": system_prompt, "stream": False, "options": {"num_ctx": 2048}},
+            OLLAMA_CHAT_URL,
+            json=payload,
             timeout=180
         )
         resp.raise_for_status()
-        raw = resp.json().get("response", "")
+        
+        # Verbesserte Antwortverarbeitung
+        response_data = resp.json()
+        raw = response_data.get("message", {}).get("content", "")
+        
+        if not raw:
+            raise ValueError("Empty response from model")
+            
         tags = extract_clean_tags(raw)
 
         if bpm_value:
@@ -137,7 +161,8 @@ bpm-92, male-vocal, synthesizer, drums, aggressive, gangsta-rap, german-rap, bas
 
     except Exception as e:
         if attempt <= RETRY_COUNT:
+            print(f"⚠️ Fehler (Versuch {attempt}/{RETRY_COUNT}): {str(e)}")
             time.sleep(2)
             return generate_tags(file_path, prompt_guidance, attempt + 1)
-        print(f"❌ Fehler bei {filename}: {e}")
+        print(f"❌ Endgültiger Fehler bei {filename}: {e}")
         return None
