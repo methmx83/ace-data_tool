@@ -72,7 +72,8 @@ melodic techno, male vocal, electronic, emotional, minor key, 124 bpm, synthesiz
 - Psychedelic
 - Psychedelic Rock
 - Trip Hop
-- R &B
+- R&B
+- RnB
 - Radio Rock
 - Ragtime
 - Regga
@@ -289,6 +290,24 @@ melodic techno, male vocal, electronic, emotional, minor key, 124 bpm, synthesiz
 - 60s
 - 70s
 - 80s
+- Electronic Music
+- Electronic Pop
+- German Pop
+- Synthpop
+- Deep House
+- Dance Music
+- Dark Rap
+- Duet
+- Aggressive Hip Hop
+- Trap-Trap Beats
+- Underground Style
+- Underground Hip Hop
+- Underground
+- Underground Rap
+- Chill
+- Electro
+
+
 
 ## Mood Liste:
 - Action
@@ -392,6 +411,7 @@ melodic techno, male vocal, electronic, emotional, minor key, 124 bpm, synthesiz
 - Haunting
 - Heavy
 - Heroic
+- High-Energy
 - Holiday
 - Homely
 - Hopeful
@@ -495,9 +515,28 @@ melodic techno, male vocal, electronic, emotional, minor key, 124 bpm, synthesiz
 - Yearning
 - Yesteryear
 - Youth
+- hard-hitting
+- Party
+- Party Time
+- Party Style
+- Danceable
+- Story
+- Storytelling
+- Story Telling
+- Narrative
+- Underground
+- Melancholy
+- Bushido
+- Gangster Attitude
+- Gangster Style
+- Aggressive Hip Hop
+- Slow Tempo
+
 
 ## Instrument Liste:
 - 808
+- bass-heavy
+- electronic-instruments
 - Ocarina
 - Pulsing Bass
 - Pluck
@@ -509,6 +548,7 @@ melodic techno, male vocal, electronic, emotional, minor key, 124 bpm, synthesiz
 - Pedalsteel
 - Panpipes
 - Orchestra
+- Synthesizer
 - Nylon Guitar
 - Recorder
 - Music Box
@@ -773,6 +813,15 @@ melodic techno, male vocal, electronic, emotional, minor key, 124 bpm, synthesiz
 - Sitar
 - Udu
 - Percussion Spanish Guitar
+- Bass Drum
+- Heavy Bass- Bassline
+- Sysnth Heavy
+- Atmospheric Instrument
+- Synth Arp
+- piano
+- Epic Drums
+- Hard Drums
+
 
 ## Rap Styles Liste:
 - Oldschool Rap
@@ -785,6 +834,7 @@ melodic techno, male vocal, electronic, emotional, minor key, 124 bpm, synthesiz
 - G-Funk
 - Gangsta Rap
 - Hardcore Rap
+- Rap Vocal
 - Underground Rap
 - Conscious Rap
 - Political Rap
@@ -865,3 +915,41 @@ melodic techno, male vocal, electronic, emotional, minor key, 124 bpm, synthesiz
 - Motivational Rap
 - Braggadocio Rap
 - Retrowave Rap
+- german
+- storytelling
+- rap-style
+- gangsta-hip-hop
+- street-hip-hop
+- female-vocals
+- gangsta-attack
+- gangster style
+- german-language
+- Male
+- Spoken Word
+- Spoken Words
+- Slow
+- German vocal
+- German Trap
+- Ad Lips
+- Urban rap
+- Rap Flow
+- Double Time rap
+- Doubletime
+- Street Lyrics
+- Female Featured
+- Emotional rap
+- Featured Guest
+- Featured vocal
+- Fast Tempo
+- Critical
+- Layered Backing Vocals
+- Vocals Harmony
+- Male A Cappella
+- A Cappella
+- Humor
+- Vocals Only
+- Acapella
+- Lyrical
+- German vocal
+- Robotic Vocal
+- Female Vocal

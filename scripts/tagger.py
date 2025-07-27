@@ -47,8 +47,66 @@ OLLAMA_URL    = config['ollama_url']
 RETRY_COUNT   = config['retry_count']
 REQUEST_DELAY = config['request_delay']
 
-# Konvertiere Generate-URL in Chat-URL
+# Konvertiere URLs für API-Endpoints
 OLLAMA_CHAT_URL = OLLAMA_URL.replace('/generate', '/chat')
+OLLAMA_RESET_URL = OLLAMA_URL.replace('/generate', '/reset')
+
+# 🔄 Modell-Management-Funktionen
+def reset_ollama_context():
+    """Setzt den Kontext des LLMs zurück"""
+    try:
+        response = requests.post(OLLAMA_RESET_URL, timeout=5)
+        if response.status_code == 200:
+            print("✅ Ollama-Kontext zurückgesetzt")
+            return True
+        print(f"⚠️ Reset fehlgeschlagen: Status {response.status_code}")
+    except Exception as e:
+        print(f"⚠️ Reset-Fehler: {str(e)}")
+    return False
+
+def unload_model():
+    """Entlädt das aktive Modell aus dem Speicher"""
+    try:
+        response = requests.post(
+            OLLAMA_CHAT_URL,
+            json={
+                "model": MODEL_NAME,
+                "messages": [],
+                "keep_alive": 0  # 0 = sofort entladen
+            },
+            timeout=10
+        )
+        if response.json().get("done_reason") == "unload":
+            print(f"♻️ Modell {MODEL_NAME} entladen")
+            return True
+    except Exception as e:
+        print(f"⚠️ Modell-Entladung fehlgeschlagen: {str(e)}")
+    return False
+
+def load_model():
+    """Lädt das Modell in den Speicher (warm start)"""
+    try:
+        response = requests.post(
+            OLLAMA_CHAT_URL,
+            json={
+                "model": MODEL_NAME,
+                "messages": []  # Leere Nachricht = nur laden
+            },
+            timeout=30
+        )
+        if response.json().get("done_reason") == "load":
+            print(f"♨️ Modell {MODEL_NAME} neu geladen")
+            return True
+    except Exception as e:
+        print(f"⚠️ Modell-Ladung fehlgeschlagen: {str(e)}")
+    return False
+
+def reload_model():
+    """Entlädt und lädt das Modell neu"""
+    print(f"🔄 Versuche Modell-Reload für {MODEL_NAME}...")
+    if unload_model():
+        time.sleep(2)  # Kurze Pause für RAM-Freigabe
+    return load_model()
 
 def sanitize_filename(name: str, max_length=120) -> str:
     name = unicodedata.normalize('NFKD', name)
@@ -71,8 +129,11 @@ def save_tags(file_path, tags):
     bereinige_datei(lyrics_file)
 
 def generate_tags(file_path, prompt_guidance=None, attempt=1):
-    # Rufe das Bereinigungs-Skript auf
-    clean_lyrics_main()
+    
+    # Bereinige die Lyrics-Datei vor der Tag-Generierung
+    lyrics_file = os.path.splitext(file_path)[0] + "_lyrics.txt"
+    from include.clean_lyrics import bereinige_datei
+    bereinige_datei(lyrics_file)
 
     print(f"\n🔧 Starte Tag-Generierung für: {os.path.basename(file_path)}")
     start_time = time.time()
@@ -88,7 +149,7 @@ def generate_tags(file_path, prompt_guidance=None, attempt=1):
     except Exception:
         artist, title = "Unknown", "Unknown"
 
-    excerpt = f"[LYRICS EXCERPT]\n{lyrics[:250]}[...]\n\n" if lyrics else ""
+    excerpt = f"[LYRICS EXCERPT]\n{lyrics[:300]}[...]\n\n" if lyrics else ""
 
     # System-Prompt mit klarer Struktur
     system_prompt = f"""
@@ -105,19 +166,19 @@ BPM: {bpm_value or 'Unknown'}
 
 ### RULES
 1. ALWAYS include 'bpm-xxx' if BPM known
-2. Generate 10-12 comma-separated tags
+2. Generate 12-14 comma-separated tags
 3. Use lowercase hyphenated format
 4. Prioritize tags from Moods.md
 5. Max 2 genre tags
-6. Include at least one from each category: vocal type, instruments, mood
-7. For rap: include at least one rap-style tag
+6. Include at least one from each category: vocal type, instruments, mood , rap styles
+7. For rap: include at least one rap-styles tag
 
 ### EXAMPLE
 bpm-92, male-vocal, synthesizer, drums, aggressive, gangsta-rap, german-rap, bass-heavy, dark, street
 """
 
     # User-Prompt für klare Aufgabenstellung
-    user_prompt = "Generate music tags based on the rules above. Output ONLY comma-separated tags."
+    user_prompt = "Generate 12 music tags based on the rules above. Output ONLY comma-separated tags."
 
     payload = {
         "model": MODEL_NAME,
@@ -126,19 +187,21 @@ bpm-92, male-vocal, synthesizer, drums, aggressive, gangsta-rap, german-rap, bas
             {"role": "user", "content": user_prompt}
         ],
         "stream": False,
-        "options": {"num_ctx": 2048}
+        "options": {"num_ctx": 4096}
     }
 
-    time.sleep(REQUEST_DELAY * attempt)
+    # Dynamisches Timeout (steigt mit Versuchen)
+    timeout = 60 * min(attempt, 5)  # Max 5 Minuten
+
     try:
         resp = requests.post(
             OLLAMA_CHAT_URL,
             json=payload,
-            timeout=180
+            timeout=timeout
         )
         resp.raise_for_status()
         
-        # Verbesserte Antwortverarbeitung
+        # Antwortverarbeitung
         response_data = resp.json()
         raw = response_data.get("message", {}).get("content", "")
         
@@ -147,6 +210,7 @@ bpm-92, male-vocal, synthesizer, drums, aggressive, gangsta-rap, german-rap, bas
             
         tags = extract_clean_tags(raw)
 
+        # BPM-Tag sicherstellen
         if bpm_value:
             bpm_tag = f"bpm-{bpm_value}"
             if bpm_tag not in tags:
@@ -162,7 +226,46 @@ bpm-92, male-vocal, synthesizer, drums, aggressive, gangsta-rap, german-rap, bas
     except Exception as e:
         if attempt <= RETRY_COUNT:
             print(f"⚠️ Fehler (Versuch {attempt}/{RETRY_COUNT}): {str(e)}")
-            time.sleep(2)
+            # Eskalierende Fehlerbehandlung
+            if attempt == 1:
+                reset_ollama_context()
+            elif attempt == 2:
+                reload_model()
+            elif attempt >= 3:
+                # VERSTÄRKTER MODELL-RELOAD
+                print("🔄 Verstärkter Modell-Reload...")
+                try:
+                    # 1. Modell explizit entladen
+                    unload_model()
+                    time.sleep(3)
+                    
+                    # 2. Modell neu laden mit längerem Timeout
+                    load_model()
+                    
+                    # 3. Zusätzlicher Kontext-Reset
+                    reset_ollama_context()
+                    print("✅ Modell und Kontext vollständig erneuert")
+                except Exception as reload_error:
+                    print(f"⚠️ Verstärkter Reload fehlgeschlagen: {reload_error}")
+            
+            time.sleep(5 * attempt)  # Progressive Verzögerung
             return generate_tags(file_path, prompt_guidance, attempt + 1)
+        
         print(f"❌ Endgültiger Fehler bei {filename}: {e}")
         return None
+
+# Testfunktion bei direkter Ausführung
+if __name__ == "__main__":
+    print("🔍 Teste Ollama-Verbindung...")
+    try:
+        resp = requests.get(OLLAMA_URL.replace('/api/generate', ''), timeout=5)
+        print(f"✅ Ollama läuft (Status {resp.status_code})")
+    except Exception as e:
+        print(f"❌ Ollama-Verbindungsfehler: {e}")
+        print("🔄 Starte Ollama-Server neu...")
+        try:
+            subprocess.Popen(["ollama", "serve"], creationflags=subprocess.CREATE_NEW_PROCESS_GROUP)
+            time.sleep(15)
+            print("✅ Ollama-Server gestartet")
+        except:
+            print("⛔ Ollama konnte nicht gestartet werden")

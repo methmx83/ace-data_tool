@@ -36,13 +36,21 @@ def detect_tempo(file_path):
         return None
 
 def adjust_bpm(tempo):
+    """Passt BPM-Werte an, um sicherzustellen, dass sie in einem sinnvollen Bereich liegen."""
+    if tempo is None or tempo <= 0:
+        print("⚠️ Ungültiger BPM-Wert: Anpassung nicht möglich")
+        return None
+
+    # Konvertiere zu float für präzise Berechnungen
+    temp = float(tempo)
+
     # Wenn BPM über 140 liegt, halbiere den Wert
-    if tempo > 140:
-        return tempo // 2
+    while temp > 140:
+        temp //= 2.0
     # Wenn BPM unter 60 liegt, verdopple den Wert
-    elif tempo < 60:
-        return tempo * 2
-    return tempo
+    while temp < 60:
+        temp *= 2
+    return int(round(temp))
 
 def get_bpm(file_path):
     detected_tempo = detect_tempo(file_path)
