@@ -16,7 +16,7 @@
   <img src="./docs/Screenshot.png" alt="ACE-Step Data Tool Screenshot" width="80%">
 </p>
 
----
+
 
 ## ✨ Features
 
@@ -27,7 +27,7 @@
 - 🗂️ **Export to ACE-Step training format**
 - 🔁 **Retry logic & logging built-in**
 
----
+
 
 ## ⚙️ Installation
 
@@ -52,7 +52,6 @@ python -c "import nltk; nltk.download('vader_lexicon'); nltk.download('stopwords
 ollama pull (your model)
 ```
 
----
 
 ## 🚀 Quickstart
 
@@ -75,7 +74,7 @@ song.mp3
 song_lyrics.txt   → Artist, title, full lyrics
 song_prompt.txt   → Tags like: bpm-90, dark, 90s, male-vocal, boom-bap
 ```
----
+
 
 ## 💻 Recommended Setup
 
@@ -106,7 +105,7 @@ ace-data_tool/
 └── data/          → Your music + generated metadata
 ```
 
----
+
 
 ## 🧩 Compatible with:
 
@@ -114,13 +113,13 @@ ace-data_tool/
 - ✅ LoRA-based training workflows
 - ✅ All local Ollama models (Qwen, DeepSeek, LLaMA2 etc.)
 
----
+
 
 ## 📜 License
 
----
 📝 Code licensed under [MIT License](LICENSE)  
 🎼 Content (Lyrics, presets, screenshots) under [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/)
----
+
+
 
 *🎶 Generate clean, structured audio metadata in seconds – fully automated.*
