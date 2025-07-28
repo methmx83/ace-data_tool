@@ -1,0 +1,2 @@
+# Erzwinge LF für alle Python-Dateien
+*.py text eol=lf
