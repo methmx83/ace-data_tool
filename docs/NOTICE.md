@@ -1,18 +1,17 @@
 ## AUDIO TAGGER PRO  1.0
+** Copyright 2025 (c) [S.K./GPT]
 
-** Copyright 2025 (c) [S.K./GPT]  
-
-## SPECIAL RECOGNITION:  
+## SPECIAL RECOGNITION:
 Manuel ChatGPT: Lead Developer & Lead Designer
-- Konzeptionelle Architektur und technische Umsetzung der Kernfunktionalitäten  
-- Entwicklung des kompletten Programm Code  
-- Design der Benutzeroberfläche (Gradio Webui)  
-- Leitung des Entwicklungsprozesses  
+Conceptual architecture and technical implementation of core functionalities
+Development of the complete program code
+Design of the user interface (Gradio Webui)
+Leadership of the development process
 
-**CONTRIBUTORS:  
-- Manuel ChatGPT: Lead/Development & Design  
-- Sven K.               : 🐒/  Asking dumb questions
+**CONTRIBUTORS:
+Manuel ChatGPT: Lead/Development & Design
+Sven K.               : 🐒/  Asking dumb questions
 
+## NOTE:
+For complete attributions and license texts, see CONTRIBUTORS.md and LICENSE.md.
 
-## HINWEIS:  
-- Für vollständige Namensnennungen und Lizenztexte siehe CONTRIBUTORS.md und LICENSE.md.  

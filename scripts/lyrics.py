@@ -2,6 +2,8 @@ import os
 import re
 import time
 
+from shared_logs import LOGS, log_message  # Importiere LOGS und log_message aus shared_logs.py
+
 import requests
 from bs4 import BeautifulSoup
 from tinytag import TinyTag
@@ -22,13 +24,13 @@ def get_audio_metadata(file_path):
     """Read title, artist, album from any audio file using Tinytag (supports WAV, MP3, FLAC, etc.)"""
     try:
         tag = TinyTag.get(file_path)
-        title = tag.title or 'Unbekannter Titel'
-        artist = tag.artist or 'Unbekannter Künstler'
-        album = tag.album or 'Unbekanntes Album'
-        print(f"[Tinytag] Titel={title}, Künstler={artist}")  # Kürzere Ausgabe
+        title = tag.title or 'Unknown Title'
+        artist = tag.artist or 'Unknown Artist'
+        album = tag.album or 'Unknown Album'
+        log_message(f"🎵 [Tinytag] Title={title}, Artist={artist}")  # Kürzere Ausgabe
         return {'title': title, 'artist': artist, 'album': album}
     except Exception as e:
-        print(f"Fehler bei Metadaten: {e}")  # Kürzere Ausgabe
+        log_message(f"⚠️ Metadata errors: {e}")  # Kürzere Ausgabe
         return {'title': '', 'artist': '', 'album': ''}
 
 
@@ -44,7 +46,7 @@ def process_single_file(file_path):
         out_path = os.path.join(os.path.dirname(file_path), f"{base}_lyrics.txt")
         os.makedirs(os.path.dirname(out_path), exist_ok=True)
         with open(out_path, 'w', encoding='utf-8') as f:
-            f.write(f"Künstler: {artist}\nTitel: {title}\n\n")
+            f.write(f"Artist: {artist}\nTitle: {title}\n\n")
             f.write(lyrics)
         return True
     except Exception as e:
@@ -60,11 +62,11 @@ def scrape_genius_lyrics(artist, title):
     url2 = f"https://genius.com/{normalize_string(clean_title)}-{normalize_string(clean_artist)}-lyrics"
     
     # Debugging-Ausgaben
-    print(f"Generated URL1: {url1}")
-    print(f"Generated URL2: {url2}")
+    print(f"💡 Generated URL1: {url1}")
+    print(f"💡 Generated URL2: {url2}")
 
     for url in (url1, url2):
-        print(f"Trying URL: {url}")  # Kürzere Ausgabe
+        log_message(f"⏳ Trying URL: {url}")  # Kürzere Ausgabe
         resp = requests.get(url, headers=HEADERS)
 
         if resp.status_code == 200:
@@ -106,12 +108,12 @@ def scrape_genius_lyrics_from_url(url):
 
 
 def get_lyrics(artist, title):
-    print(f"Suche Lyrics für: {artist} - {title}")  # Kürzere Ausgabe
+    log_message(f"🔄 Search lyrics for: {artist} - {title}")  # Kürzere Ausgabe
     lyrics = scrape_genius_lyrics(artist, title)
     if not lyrics:
         time.sleep(REQUEST_DELAY)
         lyrics = genius_search_fallback(artist, title)
-    return lyrics or 'Lyrics not found'
+    return lyrics or '⚠️ Lyrics not found'
 
 
 def load_lyrics(file_path):
@@ -130,3 +132,5 @@ def fetch_and_save_lyrics(artist, title, output_path):
     with open(output_path, 'w', encoding='utf-8') as f:
         f.write(lyrics)
     return True
+
+log_message("... Lyric Scraper loaded ✅")

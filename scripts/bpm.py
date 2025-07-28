@@ -4,6 +4,11 @@ from librosa.feature import rhythm
 import re
 import os
 import sys
+from shared_logs import LOGS, log_message
+
+
+    # Main message when loading the file
+log_message("... BPM calculation Script loaded ✅")
 
 def detect_tempo(file_path):
     try:
@@ -11,7 +16,7 @@ def detect_tempo(file_path):
         try:
             import resampy
         except ImportError:
-            print("⚠️ Resampy nicht installiert - installiere jetzt...")
+            log_message("⚠️ Resampy not installed - install now...")
             import subprocess
             subprocess.check_call([sys.executable, "-m", "pip", "install", "resampy"])
             import resampy
@@ -28,7 +33,7 @@ def detect_tempo(file_path):
         return int(round(tempo))
     
     except Exception as e:
-        print(f"⚠️ Tempo-Erkennungsfehler: {str(e)}")
+        log_message(f"⚠️ Tempo detection error: {str(e)}")
         # Fallback: Versuche Tempo aus Dateinamen zu extrahieren
         match = re.search(r'bpm[_-]?(\d{2,3})', os.path.basename(file_path), re.IGNORECASE)
         if match:
@@ -36,9 +41,9 @@ def detect_tempo(file_path):
         return None
 
 def adjust_bpm(tempo):
-    """Passt BPM-Werte an, um sicherzustellen, dass sie in einem sinnvollen Bereich liegen."""
+    """Adjusts BPM values to ensure they are within a reasonable range."""
     if tempo is None or tempo <= 0:
-        print("⚠️ Ungültiger BPM-Wert: Anpassung nicht möglich")
+        log_message("⚠️ Invalid BPM value: adjustment not possible")
         return None
 
     # Konvertiere zu float für präzise Berechnungen
@@ -54,4 +59,9 @@ def adjust_bpm(tempo):
 
 def get_bpm(file_path):
     detected_tempo = detect_tempo(file_path)
-    return adjust_bpm(detected_tempo)
+    adjusted_bpm = adjust_bpm(detected_tempo)
+    
+    # Ausgabe der Nachricht nach der BPM-Berechnung
+    log_message(f"✅ BPM calculated for {file_path}: {adjusted_bpm}")
+    
+    return adjusted_bpm

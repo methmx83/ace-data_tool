@@ -9,6 +9,10 @@ import warnings
 import shutil
 import unicodedata
 import json
+import subprocess
+from shared_logs import LOGS, log_message
+
+log_message("... Music Tagger Script loaded ✅")
 
 from tinytag import TinyTag
 import numpy as np
@@ -57,15 +61,15 @@ def reset_ollama_context():
     try:
         response = requests.post(OLLAMA_RESET_URL, timeout=5)
         if response.status_code == 200:
-            print("✅ Ollama-Kontext zurückgesetzt")
+            log_message("💡 Ollama context reset")
             return True
-        print(f"⚠️ Reset fehlgeschlagen: Status {response.status_code}")
+        log_message(f"⚠️ Reset failed: Status {response.status_code}")
     except Exception as e:
-        print(f"⚠️ Reset-Fehler: {str(e)}")
+        log_message(f"❌ Reset error: {str(e)}")
     return False
 
 def unload_model():
-    """Entlädt das aktive Modell aus dem Speicher"""
+    """Unloads the active model from memory"""
     try:
         response = requests.post(
             OLLAMA_CHAT_URL,
@@ -77,14 +81,14 @@ def unload_model():
             timeout=10
         )
         if response.json().get("done_reason") == "unload":
-            print(f"♻️ Modell {MODEL_NAME} entladen")
+            log_message(f"♻️ Model {MODEL_NAME} unloaded")
             return True
     except Exception as e:
-        print(f"⚠️ Modell-Entladung fehlgeschlagen: {str(e)}")
+        log_message(f"❌ Model unloading failed: {str(e)}")
     return False
 
 def load_model():
-    """Lädt das Modell in den Speicher (warm start)"""
+    """Loads the model into memory (warm start)"""
     try:
         response = requests.post(
             OLLAMA_CHAT_URL,
@@ -95,17 +99,17 @@ def load_model():
             timeout=30
         )
         if response.json().get("done_reason") == "load":
-            print(f"♨️ Modell {MODEL_NAME} neu geladen")
+            log_message(f"✅ Model {MODEL_NAME} reloaded")
             return True
     except Exception as e:
-        print(f"⚠️ Modell-Ladung fehlgeschlagen: {str(e)}")
+        log_message(f"❌ Model loading failed: {str(e)}")
     return False
 
 def reload_model():
-    """Entlädt und lädt das Modell neu"""
-    print(f"🔄 Versuche Modell-Reload für {MODEL_NAME}...")
+    """Unloads and reloads the model"""
+    log_message(f"🔄 Trying model reload for {MODEL_NAME}...")
     if unload_model():
-        time.sleep(2)  # Kurze Pause für RAM-Freigabe
+        time.sleep(2)  # Short pause for RAM release
     return load_model()
 
 def sanitize_filename(name: str, max_length=120) -> str:
@@ -118,24 +122,28 @@ def sanitize_filename(name: str, max_length=120) -> str:
 def save_tags(file_path, tags):
     if not tags:
         return
-    # Speichere die Tags in eine separate Datei
+    # Save tags to a separate file
     out = os.path.splitext(file_path)[0] + "_prompt.txt"
     with open(out, "w", encoding="utf-8") as f:
         f.write(", ".join(tags))
 
-    # Bereinige die Lyrics-Datei
+    # Clean up the lyrics file
     lyrics_file = os.path.splitext(file_path)[0] + "_lyrics.txt"
     from include.clean_lyrics import bereinige_datei
     bereinige_datei(lyrics_file)
 
 def generate_tags(file_path, prompt_guidance=None, attempt=1):
-    
-    # Bereinige die Lyrics-Datei vor der Tag-Generierung
+
+    # Clean up the lyrics file before tag generation
     lyrics_file = os.path.splitext(file_path)[0] + "_lyrics.txt"
     from include.clean_lyrics import bereinige_datei
+
+    log_message(f"🔧 Cleaning lyrics file: {lyrics_file}")
+
     bereinige_datei(lyrics_file)
 
-    print(f"\n🔧 Starte Tag-Generierung für: {os.path.basename(file_path)}")
+    log_message(f"📄 Lyrics file cleaned: {lyrics_file}")
+    log_message(f"\n⏳ Starting tag generation for: {os.path.basename(file_path)}")
     start_time = time.time()
 
     filename = os.path.basename(file_path)
@@ -177,7 +185,7 @@ BPM: {bpm_value or 'Unknown'}
 bpm-92, male/ female-vocal, synthesizer, drums, aggressive, gangsta-rap, german-rap, bass-heavy, dark, street
 """
 
-    # User-Prompt für klare Aufgabenstellung
+    # User prompt for clear task definition
     user_prompt = "Generate 12 music tags based on the rules above. Output ONLY comma-separated tags."
 
     payload = {
@@ -190,8 +198,8 @@ bpm-92, male/ female-vocal, synthesizer, drums, aggressive, gangsta-rap, german-
         "options": {"num_ctx": 4096}
     }
 
-    # Dynamisches Timeout (steigt mit Versuchen)
-    timeout = 60 * min(attempt, 5)  # Max 5 Minuten
+    # Dynamic timeout (increases with attempts)
+    timeout = 60 * min(attempt, 5)  # Max 5 minutes
 
     try:
         resp = requests.post(
@@ -201,7 +209,7 @@ bpm-92, male/ female-vocal, synthesizer, drums, aggressive, gangsta-rap, german-
         )
         resp.raise_for_status()
         
-        # Antwortverarbeitung
+        # Response processing
         response_data = resp.json()
         raw = response_data.get("message", {}).get("content", "")
         
@@ -210,7 +218,7 @@ bpm-92, male/ female-vocal, synthesizer, drums, aggressive, gangsta-rap, german-
             
         tags = extract_clean_tags(raw)
 
-        # BPM-Tag sicherstellen
+        # Ensure BPM tag
         if bpm_value:
             bpm_tag = f"bpm-{bpm_value}"
             if bpm_tag not in tags:
@@ -220,52 +228,52 @@ bpm-92, male/ female-vocal, synthesizer, drums, aggressive, gangsta-rap, german-
                 tags.insert(0, bpm_tag)
 
         duration = time.time() - start_time
-        print(f"✅ Tags in {duration:.2f}s: {', '.join(tags[:5])}...")
+        log_message(f"✅ Tags generated in {duration:.2f}s: 🔥 {', '.join(tags[:5])}...")
         return tags
 
     except Exception as e:
         if attempt <= RETRY_COUNT:
-            print(f"⚠️ Fehler (Versuch {attempt}/{RETRY_COUNT}): {str(e)}")
-            # Eskalierende Fehlerbehandlung
+            log_message(f"❌ Error (Attempt {attempt}/{RETRY_COUNT}): {str(e)}")
+            # Escalating error handling
             if attempt == 1:
                 reset_ollama_context()
             elif attempt == 2:
                 reload_model()
             elif attempt >= 3:
-                # VERSTÄRKTER MODELL-RELOAD
-                print("🔄 Verstärkter Modell-Reload...")
+                # ENHANCED MODEL RELOAD
+                log_message("🔄 Trying enhanced model reload...")
                 try:
-                    # 1. Modell explizit entladen
+                    # 1. Explicitly unload model
                     unload_model()
                     time.sleep(3)
-                    
-                    # 2. Modell neu laden mit längerem Timeout
+
+                    # 2. Reload model with longer timeout
                     load_model()
                     
-                    # 3. Zusätzlicher Kontext-Reset
+                    # 3. Additional context reset
                     reset_ollama_context()
-                    print("✅ Modell und Kontext vollständig erneuert")
+                    log_message("🌟 Model and context completely renewed")
                 except Exception as reload_error:
-                    print(f"⚠️ Verstärkter Reload fehlgeschlagen: {reload_error}")
-            
-            time.sleep(5 * attempt)  # Progressive Verzögerung
+                    log_message(f"⚠️ Enhanced reload failed: {reload_error}")
+
+            time.sleep(5 * attempt)  # Progressive delay
             return generate_tags(file_path, prompt_guidance, attempt + 1)
-        
-        print(f"❌ Endgültiger Fehler bei {filename}: {e}")
+
+        log_message(f"❌ Final error at {filename}: {e}")
         return None
 
-# Testfunktion bei direkter Ausführung
+# Test function for direct execution
 if __name__ == "__main__":
-    print("🔍 Teste Ollama-Verbindung...")
+    log_message("🔍 Testing Ollama connection...")
     try:
         resp = requests.get(OLLAMA_URL.replace('/api/generate', ''), timeout=5)
-        print(f"✅ Ollama läuft (Status {resp.status_code})")
+        log_message(f"✅ Ollama is running (Status {resp.status_code})")
     except Exception as e:
-        print(f"❌ Ollama-Verbindungsfehler: {e}")
-        print("🔄 Starte Ollama-Server neu...")
+        log_message(f"❌ Ollama connection error: {e}")
+        log_message("🔄 Restarting Ollama server...")
         try:
             subprocess.Popen(["ollama", "serve"], creationflags=subprocess.CREATE_NEW_PROCESS_GROUP)
             time.sleep(15)
-            print("✅ Ollama-Server gestartet")
+            log_message("✅ Ollama server started")
         except:
-            print("⛔ Ollama konnte nicht gestartet werden")
+            log_message("⛔ Ollama could not be started")

@@ -2,12 +2,16 @@
 
 import sys
 import os
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# Füge den Pfad zu shared_logs.py hinzu.
 
 current_dir = os.path.dirname(os.path.abspath(__file__))  # webui/
 project_root = os.path.dirname(current_dir)              # ace-data_tool/
 sys.path.append(os.path.join(project_root, 'scripts'))
 sys.path.append(os.path.join(project_root, 'include'))
 sys.path.append(os.path.join(project_root, 'tools'))
+
 
 import shutil
 import gradio as gr
@@ -17,6 +21,9 @@ from include.preset_loader import load_presets
 from scripts.lyrics import load_lyrics, fetch_and_save_lyrics
 from scripts.bpm import get_bpm
 from scripts.tagger import generate_tags, save_tags
+from typing import Generator  # Importiere Generator für den korrekten Rückgabetyp.
+from shared_logs import LOGS, log_message
+# Importiere LOGS und log_message aus shared_logs.py.
 
 
 AUDIO_DIR = "data"
@@ -50,10 +57,7 @@ def process_file(mp3_path: str, overwrite_lyrics: bool = False, prompt_guidance:
     tags = generate_tags(mp3_path, prompt_guidance=prompt_guidance)
     save_tags(mp3_path, tags)
 
-    return (
-        f"🎵 {os.path.basename(mp3_path)}      -      ✓ Saved lyrics and prompt\n"
-        f"BPM: {bpm}      -      TAGS: {', '.join(tags[:8])}..."
-    )
+    return f"✅ Files processed successfully."
 
 def process_all_ui(overwrite_lyrics: bool = False, genre: str = "Custom", mood: float = 0.0, user_prompt: str = "", progress=gr.Progress()) -> str:
     if user_prompt.strip():
@@ -158,7 +162,7 @@ h1, h2, h3 {
 
 
     # Prozess-Log-Box ganz oben
-    output_box = gr.Textbox(label="Process Log", lines=12, interactive=False)
+    output_box = gr.Textbox(label="Process Log", lines=4, interactive=False)
 
     # Button
     start_button = gr.Button("Start Tagging")
