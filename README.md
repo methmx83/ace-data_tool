@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  <img src="./docs/Screenshot.png" alt="ACE-Step Data Tool Screenshot" width="80%">
+  <img src="./docs/Screenshot.png" alt="ACE-Step Data Tool Screenshot" width="100%">
 </p>
 
 
