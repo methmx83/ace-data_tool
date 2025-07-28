@@ -119,7 +119,8 @@ ace-data_tool/
 
 ## 📜 Lizenz
 
-Apache 2.0 – Feel free to fork, remix & contribute.
-(c) 2025 by [`methmx83`](https://github.com/methmx83)
+---
+📝 Code licensed under [MIT License](LICENSE)  
+🎼 Content (Lyrics, presets, screenshots) under [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/)
 
 *🎶 Generieren Sie in Sekundenschnelle saubere, strukturierte Audio-Metadaten – vollautomatisch.*

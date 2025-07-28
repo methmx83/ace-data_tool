@@ -204,6 +204,5 @@ Each area of the code is encapsulated in modules. The UI layer (`webui/app.py`) 
 
 With the ACE-Step Data-Tool, you can create a richly annotated dataset from a collection of songs in just a few steps. The tool takes the tedious manual work of collecting lyrics and creating tags off your hands and standardizes the metadata format for further use in the ACE-Step project or similar endeavors. If you have questions or problems, please consult the Issues in this repository or contact the developers.
 
-**Tip:** Detailed information about the tested system configuration (hardware, drivers, software versions) can be found in the file `System_Specifications_music-scraper.md`. This contains the exact environment information of the development computer and can serve as a reference if you need to debug environment problems. Good luck using the ACE-Step Data-Tool!
 
 ```

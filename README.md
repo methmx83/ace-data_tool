@@ -6,7 +6,8 @@
 
 <p align="center">
   <img src="https://img.shields.io/github/stars/methmx83/ace-data_tool?style=social" alt="GitHub stars">
-  <img src="https://img.shields.io/github/license/methmx83/ace-data_tool" alt="License">
+  <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="MIT License">
+  <img src="https://img.shields.io/badge/Content-License--CC--BY--NC--4.0-lightgrey.svg" alt="CC BY-NC 4.0">
   <img src="https://img.shields.io/badge/Status-Stable-brightgreen" alt="Status">
   <img src="https://img.shields.io/badge/Ollama-Compatible-blue" alt="Ollama compatible">
 </p>
@@ -117,9 +118,9 @@ ace-data_tool/
 
 ## 📜 License
 
-Apache 2.0 – Feel free to fork, remix & contribute.  
-(c) 2025 by [`methmx83`](https://github.com/methmx83)
-
+---
+📝 Code licensed under [MIT License](LICENSE)  
+🎼 Content (Lyrics, presets, screenshots) under [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/)
 ---
 
 *🎶 Generate clean, structured audio metadata in seconds – fully automated.*
